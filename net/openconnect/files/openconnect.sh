@@ -57,14 +57,19 @@ proto_openconnect_setup() {
 	[ -n "$mtu" ] && append_args --mtu "$mtu"
 
 	# migrate to standard config files
-	[ -f "/etc/config/openconnect-user-cert-vpn-$config.pem" ] && mv "/etc/config/openconnect-user-cert-vpn-$config.pem" "/etc/openconnect/user-cert-vpn-$config.pem"
-	[ -f "/etc/config/openconnect-user-key-vpn-$config.pem" ] && mv "/etc/config/openconnect-user-key-vpn-$config.pem" "/etc/openconnect/user-key-vpn-$config.pem"
-	[ -f "/etc/config/openconnect-ca-vpn-$config.pem" ] && mv "/etc/config/openconnect-ca-vpn-$config.pem" "/etc/openconnect/ca-vpn-$config.pem"
+	[ -f "/etc/config/openconnect-user-cert-vpn-$config.pem" ] && mv "/etc/config/openconnect-user-cert-vpn-$config.pem" "/etc/openconnect/user-cert-$config.pem"
+	[ -f "/etc/config/openconnect-user-key-vpn-$config.pem" ] && mv "/etc/config/openconnect-user-key-vpn-$config.pem" "/etc/openconnect/user-key-$config.pem"
+	[ -f "/etc/config/openconnect-ca-vpn-$config.pem" ] && mv "/etc/config/openconnect-ca-vpn-$config.pem" "/etc/openconnect/ca-$config.pem"
 
-	[ -f /etc/openconnect/user-cert-vpn-$config.pem ] && append_args -c "/etc/openconnect/user-cert-vpn-$config.pem"
-	[ -f /etc/openconnect/user-key-vpn-$config.pem ] && append_args --sslkey "/etc/openconnect/user-key-vpn-$config.pem"
-	[ -f /etc/openconnect/ca-vpn-$config.pem ] && {
-		append_args --cafile "/etc/openconnect/ca-vpn-$config.pem"
+	# migrate old pems
+	[ -f "/etc/openconnect/user-cert-$config.pem" ] && mv "/etc/openconnect/user-cert-vpn-$config.pem" "/etc/openconnect/user-cert-$config.pem"
+	[ -f "/etc/openconnect/user-key-vpn-$config.pem" ] && mv "/etc/openconnect/user-key-vpn-$config.pem" "/etc/openconnect/user-key-$config.pem"
+	[ -f "/etc/openconnect/ca-vpn-$config.pem" ] && mv "/etc/openconnect/ca-vpn-$config.pem" "/etc/openconnect/ca-$config.pem"
+
+	[ -f /etc/openconnect/user-cert-$config.pem ] && append_args -c "/etc/openconnect/user-cert-$config.pem"
+	[ -f /etc/openconnect/user-key-$config.pem ] && append_args --sslkey "/etc/openconnect/user-key-$config.pem"
+	[ -f /etc/openconnect/ca-$config.pem ] && {
+		append_args --cafile "/etc/openconnect/ca-$config.pem"
 		append_args --no-system-trust
 	}
 
